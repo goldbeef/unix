@@ -1,0 +1,261 @@
+kernel's function
+    process schedule
+    memory manage 
+    file-system
+    process manage
+    access for device
+    network 
+    system-api
+------------------------------------------------
+program run-state
+    kernel-state
+    user-state
+shell 
+    sh 
+    bash 
+    csh
+    ksh
+------------------------------------------------
+user and group
+    user 
+        user-id
+        home-dirctory
+        login-shell
+        ---------------------
+        useradd goldbeef [-d home-dirctory]
+        passwd golddbeef 
+    group
+        group-id
+        group-name
+    root
+------------------------------------------------
+file 
+    file-type
+    file-path
+    link
+        symbol-link
+            cross file-system
+        hard-link
+    ---------------------
+    file-auth
+        u,g,o
+        r,w,x
+    ---------------------
+    file i/o mode
+        treated as byte stream 
+------------------------------------------------
+process 
+    .text 
+    .data 
+    .bss 
+    .stack 
+    .heap 
+    ---------------------
+    pid, ppid
+    exec ...
+    exit
+    _exit
+    ---------------------
+    real user-id 
+    real group-id 
+
+    effective user-id 
+    effective group-id
+    ---------------------
+    init process
+        pid = 1
+        /sbin/init 
+    ---------------------
+    daemon process 
+        ppid = 1
+    ---------------------
+    environment-list
+        export key=value 
+    ---------------------
+    mmap
+        file-mmaping
+            for file i/o 
+            for IPC
+        anonymous-mapping
+            for IPC
+            memory alloc
+------------------------------------------------
+static-lib 
+    waste for disk and memory
+    problem for software update
+shared-lib 
+    safe for disk and memory
+    easy for software update
+------------------------------------------------
+IPC (internal process communication)
+    signal
+    pipe
+    fifo 
+    socket
+    file-lock
+    mesage-queue
+    semaphore
+    shared-memory
+------------------------------------------------
+signal 
+    SIG_xxx
+    ---------------------
+    signal control
+        default operation
+        ignore
+        signal handler
+    ---------------------
+------------------------------------------------
+thread
+/proc file-system 
+------------------------------------------------
+system-api
+    call system-api
+    trigger user-state to kernel-state
+    int 80
+    return back to user-state
+------------------------------------------------
+glibc 
+    ldd programname|grep glibc 
+    /lib/i386-linux-gnu/libc.so.6 
+    ---------------------
+    __GLIBC__
+    __GLIBC_MINOR__
+------------------------------------------------
+error-process 
+    #include <errno.h>
+    extern int errno;
+    ---------------------
+    void perror(const char* msg);
+    char* strerror(int errno);
+    ---------------------
+    for thread 
+        erron is a MACORO
+------------------------------------------------
+transplant for system-api programming
+    use test macoro
+        #define _BSD_SOURCE  
+        ---------------------
+        gcc -D_BSD_SOURCE
+    ---------------------
+    system-type print  
+        typedef int pid_t;
+        printf("pid[%d]", (int)pid)
+    system-type init 
+        
+------------------------------------------------
+file I/O
+    --------------------- 
+    FILE *freopen(const char *path, const char *mode, FILE *stream);
+    ---------------------
+    file-discriptor
+        0   STDIN_FILENO    stdin
+        1   STDOUT_FILENO   stdout 
+        2   STDERR_FILENO   stderr 
+    ---------------------
+    file system-api
+        int open(const char *pathname, int flags);
+        int open(const char *pathname, int flags, mode_t mode);
+            flags: 
+                O_RDONLY 
+                O_WRONLY
+                O_RDWR 
+                O_CLOEXEC
+                    close-on-exec
+                O_CREATE
+                O_EXCL
+                    along with O_CREATE to check if exist
+                O_NOCTTY
+                O_NONBLOCK
+        int creat(const char *pathname, mode_t mode);
+        ssize_t read(int fd, void *buf, size_t count);
+        ssize_t write(int fd, const void *buf, size_t count);
+        int close(int fd);
+        off_t lseek(int fd, off_t offset, int whence);
+            whence
+                SEEK_SET
+                SEEK_CUR
+                SEEK_END
+        ---------------------
+    ---------------------
+    file hole 
+        exceed to end of file by lseek 
+        ---------------------
+        not wate disk-block
+    ---------------------
+------------------------------------------------
+process
+    pid_t getpid(void);
+        pid_t num: linux set max 32767
+            /process/sys/kernel/max_pid
+            once up to max-limit, then reset to 300 (1-300 for special use)
+        process-status
+            /proc/pidnum/status
+                include process-status in detail
+    pid_t getppid(void);
+        pstree [-p pid]
+            get proces-tree
+    ---------------------
+    process-addr-space
+        text
+        data
+        bss
+        stack
+        heap
+        argv/env
+        kernel-space 
+    size elf-file
+        get sections and size 
+    ---------------------
+    virtual-addr-space
+        use spatial-locality and temporal-locality
+        ---------------------
+        page-size
+            4094
+        process 
+            page-table
+                store in RAM-AREA or SWAP-AREA
+                virtual-addr-space --> physiacal-page , by PMMU(page memory manage unit)
+    ---------------------
+    stack
+    ---------------------
+    argc/argv 
+        /proc/pidnum/cmdline
+    -------------------------
+    environment-list
+        add env-var long time:
+            SHELL=/bin/bash
+            export SHELL 
+
+            exprot SHELL=/bin/bash 
+        add env-var tmporal time:
+            key1=val1 key2=val2 programname
+        ---------------------
+        get env-var
+            global var 
+                char** environ;
+
+            main(int argc, char* argv[], char* envp[])
+            
+            char* getenv(const char*  name);
+
+        ---------------------
+        set env-var
+            int putenv(char* string);
+                string not stored in stack 
+            int setenv(const char* name, const char* value, int overwrite);
+        ---------------------
+        unset env-var 
+            int unitenv(const char* name);
+            int clearenv(void);
+    ---------------------
+    no-local jump
+        int setjmp(jmp_buf env);
+        void longjmp(jump_buf env, int val);
+        ---------------------
+        abuse longjmp
+            jump to a returned-stack-frame: will crash
+        use volatile
+            avoid compiler to doing some-perf
+------------------------------------------------
+
