@@ -184,6 +184,92 @@ file I/O
         not wate disk-block
     ---------------------
 ------------------------------------------------
+deep into file-i/o
+    race-condition
+    atom-operation
+    ---------------------
+    create file atom-operation
+        open, O_EXCL|O_CREATE
+    append data atom-operation
+        open, O_APPEND
+    ---------------------
+    file control operation
+        int fcntl(fd, int cmd, ...)
+            cmd 
+                F_GETFL
+                F_SETFL
+    ---------------------
+    内核维护的文件相关数据结构
+        文件描述服表：
+            process-level
+            ---------------------
+            file-discriptor mark 
+                close-on-exec
+            file-handler ref
+        打开文件表：
+            OS-level
+            ---------------------
+            file-offset
+            file-stat-flag
+                open 
+            file-access-mode
+            signal-related set 
+            i-node ref 
+        i-node表：
+            file-system-level
+            ---------------------
+            file-type
+            lock-list 
+            file-basic-property
+    ---------------------
+    复制文件表述符
+        int dup(int oldfd);
+        
+        int dup2(int oldfd, int newfd);
+        int fcntl(int oldfd, F_DUPFD, int newfd);
+
+        int dup3(int oldfd, int newfd, int flags)
+            O_CLOEXEC
+        int fcntl(...);
+            F_DUPFD_CLOEXEC
+    ---------------------
+    ssize_t pread(int fd, void* buff, size_t count, off_t offset);
+    ssize_t pwrite(int fd, void* buff, size_t count, off_t offset);
+    ---------------------
+    ssize_t readv(int fd, const struc iovec* iov, int iovcount);
+    ssize_t writev(int fd, const struc iovec* iov, int iovcount);
+        --------------------- 
+        struct iovec 
+        {
+            void* iov_base;
+            size_t iov_len;
+        }
+    -------------------------
+    ssize_t preadv(int fd, const struc iovec* iov, int iovcount, off_t offset);
+    ssize_t owritev(int fd, const struc iovec* iov, int iovcount, off_t offset);
+    ---------------------
+    int truncate(const char* pathname, off_t length);
+    int ftruncate(int fd, off_t length);
+        //may result in file-whole
+    -------------------------
+    large-file-i/o
+        LFS-API
+            xxx64(...)
+        ---------------------
+        FILE_OFFSET_BITS=64
+            #define FILE_OFFSET_BITS 64 
+            gcc -D_FILE_OFFSET_BITS=64 
+    ---------------------
+    /dev/fd/xx  --> /proc/self/fd/xx 
+    /dev/stdxxx --> /proc/self/fd/xxx 
+        use in shell: no need to special control '-'
+            ls |diff /dev/fd/0 oldfilleList
+    -------------------------
+    int mkstemp(char* template);
+        easy to use 
+    FILE* tmpFile(void);
+
+------------------------------------------------
 process
     pid_t getpid(void);
         pid_t num: linux set max 32767
@@ -258,4 +344,44 @@ process
         use volatile
             avoid compiler to doing some-perf
 ------------------------------------------------
-
+memory-alloc
+    program-break
+        int brk(void* end_data_segment);
+        void *sbrk(intptr_t increment);
+    ---------------------
+    heap-memory-alloc
+        void* malloc(size_t size);
+            easy to use 
+        void  free(void* ptr);
+            will not decrease program-break generally
+        ---------------------
+        implement
+            malloc 
+                alloc form avaliable-free-queue
+            free 
+                free to avaliable-free-queue
+        ---------------------
+        malloc-debug tool
+            mtrace(), muntrace()
+                with MALLOC_TRACE
+            mcheck(), mprobe()
+                with cc-lmcheck
+            MALLOC_CHECK
+        ---------------------
+        mallopt()
+        mallinfo()
+    ---------------------
+    void* calloc(size_t numitems, size_t size);
+    void* realloc(void* ptr, size_t size);
+    ---------------------
+    allign
+        void* memalign(size_t boundary, size_t size);
+        int posix_memalign(void** memptr, size_t allign, size_t size);
+    ---------------------
+    void* alloc(size_t size);
+        //from stack to get memory
+        //should not use in function-param
+        // foo(alloc(100));
+        ---------------------
+        special use 
+            in longjmp to avoid memory-sleek
