@@ -385,3 +385,86 @@ memory-alloc
         ---------------------
         special use 
             in longjmp to avoid memory-sleek
+------------------------------------------------
+file-system 
+    device-type 
+        character-device
+        block-device
+    device-id 
+        primary-device-id  (12 bits)
+        auxiliary-device-id (20 bits)
+    device-file --> i-node's device-id --> drive-program
+    -------------------------
+    disk 
+        disk-device
+        disk-partition
+            file-system 
+            data-area
+            swap-area 
+    -------------------------
+    ext2-file-system 
+        intro-block | super-block | i-node-list | data-block
+        ---------------------
+        i-node 
+            file-type
+            file-auth 
+            ..
+            hard-link
+            file-size 
+            file-block
+        ---------------------
+        i-node entry: total 15 ptr 
+            ptr[0-11] 
+                point to data-block 
+            ptr[12] 
+                point to IPB 
+            ptr[13]
+                point to 2IPB 
+            ptr[14]
+                point to 3IPP
+        max-file size: 
+            (data-block-size/ptr-size)^3*data-block-size
+        ---------------------
+        weakness
+            check of file-system with low performance
+    -------------------------
+    virtual-file-system (VFS)
+    -------------------------
+    log-file-system
+        high-performance
+        ---------------------
+        ext3
+        ext4
+    -------------------------
+    mount  device directory
+        /proc/mounts 
+            linux 
+        /etc/fstab 
+        /etc/mtab 
+        ---------------------
+        #include <sys/mount.h>
+        int mount(const char* source, const char* target, const char* fstype, long mountflags, const void* data);
+        int umount(const char* target)
+        int umount2(const char* target, int flags)
+        ---------------------
+        advanced-mount-character
+            one file-system  --> multi-mount-points
+            mount-flags for once 
+            bind-mount 
+                mount --bind src dst
+                used for jail
+            rec-mount
+                mount --rbind
+    ---------------------
+    virtual-addr-space
+        tmpfs
+            based on memory /swap 
+            used for system-V-IPC | posix-IPC
+        ---------------------
+        mount -t tmpfs src dst
+    ---------------------
+    statvfs
+    fstatvfs
+        
+
+        
