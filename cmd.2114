@@ -465,6 +465,73 @@ file-system
     ---------------------
     statvfs
     fstatvfs
-        
+------------------------------------------------
+file-property
+    stat 
+    fstat 
+    lstat 
+    ---------------------
+    struct stat 
+    {
+        ....
+    }
 
-        
+    .st_dev
+        device-id
+    .st_nlink
+        hard-link
+    .st_mode 
+    .st_size
+    .st_blocks 
+    .st_blksize
+        for i/o optimization
+    ---------------------
+    .st_atime
+    .st_mtime
+    .st_ctime
+
+    api to change timestamp
+        utime 
+            struct utimbuf 
+        utimes
+            struct timeval
+        futimes
+            struct timeval 
+        lutimes 
+            struct timeval 
+        utimestat
+            struct timespec
+        futimens 
+            struct timespec 
+    ---------------------
+    file-owner
+        create-file 
+            file-user-id
+                set process's euid
+            file-group-id
+                set process's ugid 
+                    file-system with nogroup and no-set-gid
+                    -o nogrpid | -o sysvgroups
+                inherit form upper-directory
+                    -o grpid | -o bsdgroups
+                    upper-directory with g+s
+        ---------------------
+        change file-owner
+            chown
+            lchown
+            fchown
+            ---------------------
+            remove directory's g+s if need 
+        -------------------------
+    -------------------------
+    file-auth
+        regular-file
+            user/group/other read/write/exec 
+            user+s group+s +T 
+        directory-file 
+            user/group/other read/write/exec 
+            user+s group+s +T 
+    -------------------------
+    access 
+        with real-id 
+    
