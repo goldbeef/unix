@@ -386,7 +386,7 @@ memory-alloc
         special use 
             in longjmp to avoid memory-sleek
 ------------------------------------------------
-file-system 
+file-system  (207)
     device-type 
         character-device
         block-device
@@ -534,4 +534,55 @@ file-property
     -------------------------
     access 
         with real-id 
-    
+    ------------------------------------------------
+    set-gid
+        for elf-exec with privillege auth
+        new-file's gid inherit form upper-directory for file-system
+        for file-lock 
+    sticky
+        for elf-exec file in SWAP-AREA
+        for remove file restricion
+            /tmp 
+    -------------------------
+    umask 
+    -------------------------
+    change file-auth 
+        chmod 
+        fchmod
+    ---------------------
+    i-node-extend-flag 
+        lsattr
+        chattr 
+------------------------------------------------
+file-system-extend-property
+    extend-attr (EA)
+        255 character 
+        64 k
+    ---------------------
+    namespace.name 
+        user EA 
+        trusted EA 
+        system EA 
+        security EA 
+    ---------------------
+    setfattr
+    getfattr
+    -------------------------
+    api 
+        setxattr
+        lsetxattr
+        fsetxattr
+
+        getxattr
+        lgetxattr
+        fgetxattr
+
+        removexattr
+        lremovexattr
+        fremovexattr 
+
+        listxattr 
+        llistxattr
+        flistxattr
+
+
