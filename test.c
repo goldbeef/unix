@@ -14,6 +14,17 @@ int main()
 #ifdef _GNU_SOURCE
     printf("fullPath[%d], shortPath[%s]\n", name, short_name);
 #endif
+    char buff[4];
+    printf("buff[%p]\n", buff);
+    printf("buff[%p]\n", buff + 1);
+    
+    FILE* pFile = fopen("tmp", "rb");
+    if (pFile == NULL)
+    {
+        printf("open file error");
+        return -1;
+    }
+
     while (1)
     {
         sleep(5);
