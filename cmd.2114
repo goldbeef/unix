@@ -584,5 +584,105 @@ file-system-extend-property
         listxattr 
         llistxattr
         flistxattr
+------------------------------------------------
+directory and link 
+    hard-link
+        ln src dst 
+        ls -ai dst
+        not cross file-system 
+        ---------------------
+        api 
+            link 
+            unlink
+            rename
+        when all unlink, and process's file-discriptor is all closed, delete file-data
+    ---------------------
+    process's open file 
+        /proc/pid/fd/xxx 
+        lsof -p pid 
+        fuser 
+    ---------------------
+    soft-link
+        ln -s src dst 
+        ls -F  #@
+        cross file-system
+            _POSIX_SYMLOOP_MAX 8
+        ---------------------
+        for path's directory part, always de-refrence
+        for path's basename part, depend api (stat/lstat)
+        ---------------------
+        api 
+            symlink
+            readlink
+    -------------------------
+    directory 
+        api 
+            mkdir 
+            rmdir
 
+            opendir
+            fdopendir
 
+            readdir
+            readdir_t
+
+            rewinddir
+            closedir
+
+            dirfd
+
+            nftw
+
+            getcwd
+
+            chdir
+            fchdir
+
+            openat
+                very strong 
+            chroot
+                for ftp
+        ---------------------
+        struct dirent
+        {
+            ino_t ino;
+            char d_name[];
+        }
+    -------------------------
+    glibc 
+        remove
+    -------------------------
+    path-resolve
+        api 
+            realpath
+            dirname
+            basename 
+------------------------------------------------
+watch-file-event  (only linux 2.6)
+    inotify 
+        api 
+            inotify_init
+            inotify_add_watch
+            inotify_rm_watch 
+        ---------------------
+        event 
+            IN_XXX
+        -------------------------
+        struct inotify_event
+        {
+            int wd;
+            uint32_t mask;
+            uint32_t cookie;
+            uint32_t len;
+            char name[];
+        }
+        ---------------------
+        limits
+            /proc/sys/fs/inotify/XXX 
+            ---------------------
+            max_queued_events
+            max_user_instances
+            max_user_watches
+    ---------------------
+    dnotify
+        too old ... 
