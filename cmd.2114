@@ -686,3 +686,96 @@ watch-file-event  (only linux 2.6)
     ---------------------
     dnotify
         too old ... 
+------------------------------------------------
+signal 
+    signal-generate
+        hardware
+        keybord (ctrl+c, ctrl+z, ctrl+\)
+        other soft-interrupt 
+    ---------------------
+    signal-type
+        traditional-sig (1-31)
+        realtime-sig
+    ---------------------
+    signal-state
+        pending
+            after generating, before delervery
+    ---------------------
+    signal-operation
+        ignore 
+        kill
+        coredump
+        stop 
+        continue
+    ---------------------
+    signal-handler
+        default 
+        ignore 
+        user-defined-handler
+    ---------------------
+    /proc/pid/status 
+        SigPnd
+        SigBlk
+        SigIgn 
+        sigCgt 
+    ---------------------
+    man 7 signal 
+        SIGKILL
+        SIGSTOP
+        SIGTERM
+            default by kill 
+        SIGUSR1 
+        SIGUSR2 
+    ---------------------
+    set signal-handler
+        #include <signal.h>
+        typedef void (sighandler_t*) (int);
+        sighandler_t signal(int sig, sighandler_t sigHandler);
+        ---------------------
+        special signal-handler
+            SIG_ERR
+            SIG_DEF
+            SIG_IGN
+        ---------------------
+    ---------------------
+    signal-send
+        #include <signal.h>
+        int kill(pid_t pid, int sig);
+        int raise(int sig);
+        int pthread_kill(pthread_t tid, int sig);
+        int killpg(pid_t prgp, int sig);
+        ---------------------
+        auth-check
+            real-user-id --> <real-user-id, saved set-user-id>
+            effective-user-id --> <real-user-id, safe set-user-id>
+    ---------------------
+    check-process-existence
+        send signal (signo = 0)
+        wait
+        semaphore or other lock 
+        FIFO or other IPC 
+        /proc/pid/ 
+    ---------------------
+    signal-show
+        #include <string.h>
+        char* strsignal(int sig);
+        ---------------------
+        #include <signal.h>
+        extern const char* const sys_siglist[];
+        ---------------------
+        #include <signal.h>
+        void psignal(int sig, const char* msg);
+          
+    ---------------------
+    signal-set 
+        #include <signal.h>
+        int sigemptyset(sigset_t *set);
+        int sigfillset(sigset_t *set);
+
+        int sigaddset(sigset_t * set);
+        int sigdelset(sigset_t* set);
+        int sigismember(const sigset_t* set, int sig);
+        
+        int sigandset(sigset_t* set, sigset_t* left, sigset_t* right);
+        int sigorset(sigset_t* set, sigset_t* left, sigset_t* right);
+        int sigisemptyset(const sigset_t* set);
