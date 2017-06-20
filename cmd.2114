@@ -737,6 +737,22 @@ signal
             SIG_DEF
             SIG_IGN
         ---------------------
+        #include <signal.h>
+        int sigaction(int sig, const struct sigaction* act, struct sigaction* oldact);
+            ---------------------
+            struct sigaction
+            {
+                void (*sa_handler) (int);
+                sigset_t sa_mask;
+                int sa_flags;
+                void (*sa_restorer) (void);
+            }
+            ---------------------
+            sa_flags
+                SA_SIGCHLD
+                SA_RESETHAND
+                SA_RESTART
+                SA_INFO
     ---------------------
     signal-send
         #include <signal.h>
@@ -793,3 +809,7 @@ signal
         ---------------------
         traditional-sig not support QUEUE
     ---------------------
+    pause
+        #include <unistd.h>
+        int pause(void);
+------------------------------------------------
