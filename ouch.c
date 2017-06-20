@@ -7,9 +7,12 @@
 
 #include <stdio.h>
 #include <signal.h>
+#include "signal_function.c"
 
 void signalHandler(int signo)
 {
+    printSigMask(stdout, "sigBlk");
+    printPendingSig(stdout, "sigPending");
     static int count = 0;
     printf("ouch, count[%d]\n", count);
     count++;

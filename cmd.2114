@@ -779,3 +779,17 @@ signal
         int sigandset(sigset_t* set, sigset_t* left, sigset_t* right);
         int sigorset(sigset_t* set, sigset_t* left, sigset_t* right);
         int sigisemptyset(const sigset_t* set);
+    ---------------------
+    sig-mask
+        #include <signal.h>
+        int sigprocmask(int how, const sigset_t* set, sigset_t* oldset);
+            SIG_BLOCK
+            SIG_UNBLOCK
+            SIG_SETMASK
+    ---------------------
+    sig-pending
+        #include <signal.h>
+        int sigpending(sigset_t* set);
+        ---------------------
+        traditional-sig not support QUEUE
+    ---------------------
