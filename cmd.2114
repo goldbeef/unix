@@ -742,17 +742,34 @@ signal
             ---------------------
             struct sigaction
             {
-                void (*sa_handler) (int);
+                union
+                {
+                    void (*sa_handler) (int);
+                    void (*sa_sigaction)(int, siginfo_t*, void*);
+                }__sigaction_handler;
+
                 sigset_t sa_mask;
                 int sa_flags;
                 void (*sa_restorer) (void);
             }
+
+            #define sa_handler __sigaction_handler.sa_handler;
+            #define sa_sigaction __sigaction_handler.sa_sigaction;
+
             ---------------------
             sa_flags
                 SA_SIGCHLD
                 SA_RESETHAND
                 SA_RESTART
-                SA_INFO
+                SA_SIGINFO
+                    ---------------------
+                    sa_sigaction 
+                    ---------------------
+                    typedef struct
+                    {
+                        ....
+                    }siginfo_t;
+
     ---------------------
     signal-send
         #include <signal.h>
@@ -813,3 +830,53 @@ signal
         #include <unistd.h>
         int pause(void);
 ------------------------------------------------
+sig-handler-function
+    common design
+        1. mark global flags, and return 
+        2. do clear job, and terminate process or do no-local jump;
+    ---------------------
+    reentrant-function
+        mult-thread call funtion safely 
+    async-signal-safe-functionn
+        call function in sig-handler-function safely 
+        ---------------------
+        two type 
+            reentrant-function
+            function can't  be interrupted by signal 
+    ---------------------
+    volatile sig_atomic_t flag;
+    ---------------------
+    terminate sig-handler-function
+        _exit();
+        kill();
+        longjmp();
+        abort();
+    ---------------------
+    sig-handler-function no-local jump 
+        #include <setjmp.h>
+        int sigsetjmp(sigjmp_buf env, int savesigs);
+        void siglongjmp(sigjmp_buf env, int val);
+    ---------------------
+    #include <stdlib.h>
+    void abort(void);
+        SIGABRT
+    ---------------------
+    #include <signal.h>
+    int sigaltstack(const stack_t* sigstack, stack_t* old_sigstack);
+        ---------------------
+        typedef struct
+        {
+            void * ss_sp;
+            int ss_flags; 
+            size_t ss_size;
+        }
+        ---------------------
+        ss_flags
+            SS_ONSTACK
+            SS_DISABLE
+        ss_size
+            SIGSTKSZ 
+        ---------------------
+        set sigaction.sa_flags
+            SA_ONSTACK
+        
