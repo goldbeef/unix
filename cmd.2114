@@ -880,3 +880,37 @@ sig-handler-function
         set sigaction.sa_flags
             SA_ONSTACK
         
+------------------------------------------------
+system-api interrupted and restart
+    ---------------------
+    while ((cnt = read(fd, buf, BUF_SIZE)) == -1 && errno == EINTR)
+    {
+        continue;
+    }
+    ---------------------
+    sigaction
+        SA_RESTART
+
+------------------------------------------------
+signal-advanced
+    coredump 
+        ctrl + \
+        ---------------------
+        ulimic -c 1024|unlimited
+        ---------------------
+        /proc/pid/coredump_filter
+        man 5 core 
+        ---------------------
+        /proc/sys/kernel/core_pattern 
+    --------------------- 
+    special-sig
+        SIGKILL/SIGSTOP 
+            can not change default signal-operation 
+        ---------------------
+        SIGCONT 
+            can not change default signal-operation 
+            once catch SIGCONT, remove off pending SIGSTOP 
+        SIGSTOP 
+            once catch SIGSTOP, remove off pending SIGCONT 
+    ---------------------
+
