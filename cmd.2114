@@ -912,5 +912,71 @@ signal-advanced
             once catch SIGCONT, remove off pending SIGSTOP 
         SIGSTOP 
             once catch SIGSTOP, remove off pending SIGCONT 
+        terminal-ignored-sig
+            should not change the operation of terminal-ignored-sig
     ---------------------
-
+    process-sleep-state
+        TASK_INTERRUPTIBLE
+        TASK_UNINTERRUPTIBLE
+        TASK_KILLABLE (linux 2.6)
+    ---------------------
+    hardware-sig
+        SIGBUS/SIGFPE/SIGILL/SIGSEGV 
+        ---------------------
+        serveral operation
+            return from sig-handler-function
+            ignore signal  (linux force delervery signal )
+            block signal (linux forece kill process)
+        ---------------------
+        proper operation
+            the default operation (terminate process)
+            no return signal-handler (terminate process)
+            no-local jump 
+    ---------------------
+    signal-generate-ways
+        async (other process's kill)
+        sync (self kill)
+    ---------------------
+    signal-delivery-time
+        re-scheduled moment
+        finished-system-all moment 
+    ---------------------
+    signal-delivery-order
+        order by signum (linux) 
+        if  system-api is called in signal-handler, then may jump into an other signal-handler
+    ---------------------
+    old-signal 
+        signal-handler is reset the default operation when in signal-handler
+        no block the signal when in signal-handler
+        not support restart option 
+        ---------------------
+        glic2 support new-signal
+        ---------------------
+        #include <signal.h>
+        sighandler_t sysv_signal(int, sighandler_t);
+            support old-signal 
+    ---------------------
+    realtime-sig
+        SIGRTMIN ~ SIGRTMAX
+        support queue option 
+            SIGQUEUE_MAX
+            RLIMIT_SIGPENDING
+            /proc/pid/status SigQ
+        spport accompany data 
+        delervery-order is sured 
+        ---------------------
+        use realtime-sig
+            sender 
+                sigqueue 
+                kill/killpg/raise (linux support receiver's queued) 
+            receiver
+                SA_SIGINFO 
+        ---------------------
+        #include <signal.h>
+        int sigqueue(pid_t pid, int sig, const union sigval value);
+            ---------------------
+            union sigval 
+            {
+                int sival_int;
+                void* sival_ptr;
+            }

@@ -9,25 +9,14 @@
 #include <unistd.h>
 #include <errno.h>
 
+#include "check.h"
+
 int main()
 {
-#ifdef _GNU_SOURCE
-    printf("fullPath[%d], shortPath[%s]\n", name, short_name);
-#endif
-    char buff[4];
-    printf("buff[%p]\n", buff);
-    printf("buff[%p]\n", buff + 1);
-    
-    FILE* pFile = fopen("tmp", "rb");
-    if (pFile == NULL)
-    {
-        printf("open file error");
-        return -1;
-    }
+    //CHECK_RET(-1, "main");
+    //CHECK_RET(-1, "main, ret[%d]", -2);
 
-    while (1)
-    {
-        sleep(5);
-    }
+    //CHECK_NULL(NULL, "main");
+    CHECK_NULL(NULL, "main, ret[%d]", -2);
     return 0;
 }
