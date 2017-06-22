@@ -12,7 +12,7 @@
 #define CHECK_RET(ret, format, args...)                                             \
     do                                                                              \
     {                                                                               \
-        if (ret != 0)                                                               \
+        if (ret == -1)                                                               \
         {                                                                           \
             printf("(%s:%d) ret[%d] "format"\n", __FILE__, __LINE__, ret, ##args);  \
             return ret;                                                             \

@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
+#include <unistd.h>
+#include <sys/signalfd.h>
 
 #include "check.h"
 #include "signal_function.c"

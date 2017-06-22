@@ -997,3 +997,42 @@ signal-advanced
             1. temporally block a signal;
             2. do cricial code fragment;
             3. unblock the previous signal and suspend the process, until signal is caught
+        ---------------------
+        async wait for signal 
+    ---------------------
+    sigwait
+        sync wait for signal 
+        ---------------------
+        #include <signal.h>
+        int sigwait(const sigset_t* set, int* sig);
+        int sigwaitinfo(const sigset_t* set, siginfo_t* info);
+        int sigtimewait(const sigset_t* set, siginfo_t* info, const struct timespec* timeout);
+            ---------------------
+            struct timespec
+            {
+                time_t tv_sec;
+                long tv_nsec;
+            }
+        ---------------------
+        set should be blocked before call sigwait/sigwaitinfo
+    ---------------------
+    signalfd (only for linux)
+        sync wait for signal 
+        ---------------------
+        #include <sys/signalfd.h>
+        int signalfd(int fd, const sigset_t* mask, int flags);
+            flags 
+                SFD_CLOEXEC
+                SFD_NONBLOCK
+            ---------------------
+            struct signalfd_siginfo
+            {
+                ...
+                ...
+            }
+            ---------------------
+            mask should  be blocked before call signalfd 
+        ---------------------
+    ---------------------
+    use signal as IPC 
+------------------------------------------------
