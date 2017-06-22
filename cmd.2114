@@ -980,3 +980,20 @@ signal-advanced
                 int sival_int;
                 void* sival_ptr;
             }
+    ---------------------
+    sigsuspend
+        #include <signal.h>
+        int sigsuspend(const sigset_t* mask);
+            ---------------------
+            temporally replace sig-mask and suspend the process;
+            until signal-handler is triggered,  then recover the previous sig-mask 
+        ---------------------
+        eqult to -->
+            sigprocmask(SIG_SETMASK, &mask, &prevMask);
+            pause();
+            sigprocmask(SIG_SETMASK, &prevMask, NULL);
+        ---------------------
+        use secne
+            1. temporally block a signal;
+            2. do cricial code fragment;
+            3. unblock the previous signal and suspend the process, until signal is caught
