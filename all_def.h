@@ -14,6 +14,9 @@
 #include <signal.h>
 #include <unistd.h>
 #include <sys/signalfd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <fcntl.h>
 
 #include "check.h"
 #include "signal_function.c"
