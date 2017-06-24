@@ -1036,3 +1036,34 @@ signal-advanced
     ---------------------
     use signal as IPC 
 ------------------------------------------------
+process-create
+    #include <unistd.h>
+    pid_t fork(void);
+        ---------------------
+        child-process shares the opened file-discriptor of parent-process (if no close-on-exec)
+        so, process should close no needed file-discriptor
+        ---------------------
+        copy-on-write
+    ---------------------
+    #include <unistd.h>
+    pid_t vfork(void)
+        no-copy virtual-addr-page
+        suspend parent-process until child-process call exec or _exit 
+        child-process shares the .data, .bss, stack, .heap from parent-process
+        ---------------------
+        undefined-operation
+            child-process modify parent-process's data 
+            child-process return 
+            child-process call other funtion before exec or _exit
+            if call exec fails, should _exit
+        ---------------------
+        old way for process-create to get better performance
+    ---------------------
+    fork-race-condition
+        whether parent-process or child-process is scheduled, is not determined.
+        --------------------- 
+        /proc/sys/kernel/sched_child_runs_first (only for linux since 2.6.32)
+        ---------------------
+        should use sync method to determine the order 
+            semaphore/lock/pipe/signal
+    ---------------------
