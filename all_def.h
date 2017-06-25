@@ -18,8 +18,10 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <libgen.h>
 
 #include "check.h"
 #include "signal_function.c"
+#include "print_wait_status.c"
 
 #endif
