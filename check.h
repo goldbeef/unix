@@ -8,6 +8,7 @@
 #define __CHECK__
 
 #include <stdio.h>
+#include <pthread.h>
 
 #define CHECK_RET(ret, format, args...)                                             \
     do                                                                              \
@@ -20,6 +21,17 @@
     }                                                                               \
     while(0);
 
+
+#define CHECK_THREAD_RET(ret, format, args...)                                             \
+    do                                                                              \
+    {                                                                               \
+        if (ret != 0)                                                               \
+        {                                                                           \
+            printf("(%s:%d) ret[%d] "format"\n", __FILE__, __LINE__, ret, ##args);  \
+            pthread_exit((void*) ret);                                                             \
+        }                                                                           \
+    }                                                                               \
+    while(0);
 
 #define CHECK_NULL(ptr, format, args...)                                                    \
     do                                                                                      \

@@ -19,6 +19,9 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <libgen.h>
+#include <sched.h>
+#include <sys/syscall.h>
+#include <pthread.h>
 
 #include "check.h"
 #include "signal_function.c"
