@@ -22,6 +22,18 @@
     while(0);
 
 
+#define CHECK_RET_VOID(ret, format, args...)                                             \
+    do                                                                              \
+    {                                                                               \
+        if (ret == -1)                                                               \
+        {                                                                           \
+            printf("(%s:%d) ret[%d] "format"\n", __FILE__, __LINE__, ret, ##args);  \
+            return;                                                             \
+        }                                                                           \
+    }                                                                               \
+    while(0);
+
+
 #define CHECK_THREAD_RET(ret, format, args...)                                             \
     do                                                                              \
     {                                                                               \
