@@ -1075,4 +1075,171 @@ process-terminate
         return 
         exit 
         _exit
+------------------------------------------------
+process-priority and process-schedule
+    -------------------------
+    no-real-time schedule 
+        SCHED_OTHER
+            the default process-schedule 
+            ---------------------
+            nice priority
+                -19 ~ 20 
+                ---------------------
+                the prority is a factor which influences process-schedule
+            ---------------------
+            #include <sys/resource.h>
+            int getpriority(int which, id_t who);
+            int setpriority(int which, id_t who, int prio);
+                which 
+                    PRIO_PROCESS
+                    PRIO_PGRP
+                    PRIO_USER
+        -------------------------
+        SCHED_BATCH
+        SCHED_IDLE 
+            only for linux 
+    --------------------- 
+    real-time  scheduled 
+        ---------------------
+        SCHED_RR 
+            #include <sched.h>
+            int sched_rr_get_interval(pid_t pid, struct timespec *sp);
+        SCHED_FIFO 
+        ---------------------
+        priority
+            0 ~ 99
+            the priority is strict for process-schedule
+        ---------------------
+        #include <sched.h>
+        int sched_get_priority_min(int policy);
+        int sched_get_priority_max(int policy);
 
+        int sched_setscheduler(pid_t pid, int policy, const struct sched_param* param);
+        int sched_getscheduler(pid_t pid);
+
+        int sched_setparam(pid_t pid, const struct sched_param* param);
+        int schde_getparam(pid_t pid, struct sched_param* param)
+        ---------------------
+            struct sched_param 
+            {
+                int sched_priority;
+            }
+        ---------------------
+        avoid real-time process lock the cpu
+            ---------------------
+            setrlimit 
+                RLIMIT_CPU, SIGXCPU
+            ---------------------
+            alarm
+                SIGALRM
+            ---------------------
+            develop watchdog to monitor real-time process 
+            ---------------------
+            RLIMIT_RTTIME, SIGXCPU 
+        ---------------------
+        fobid child-process's special schedule
+            SCHED_RESET_ON_FORK
+                real-time --> no-real-time 
+        ---------------------
+        release-cpu
+            #include <sched.h>
+            int sched_yield(void);
+        ---------------------
+
+    ------------------------------------------------
+    cpu-affinify
+        process switches betweent cpus, may influences performance
+        -------------------------
+        cpuset 7
+        ---------------------
+        #include <schd.h>
+        int sched_setaffinity(pid_t pid, size_t len, cpu_set_t* set);
+        int sched_getaffinity(pid_t pid, size_t len, cpu_set_t* set);
+            //only for linux
+        void CPU_ZERO(cpu_set_t* set);
+        void CPU_SET(int cpu, cpu_set_t* set);
+        void CPU_CLR(int cpu, cpu_set_t* set);
+        int  CPU_ISSET(int cpu, cpu_set_t* set);
+-----------------------------------------------
+process-resource
+    #include <sys/resource>
+    int getrusage(int who, struct rusage* res_usage);
+        who 
+            RUSAGE_SELFE
+            RUSAGE_CHILDREN
+                for teminated or suspending child-process
+            RUSAGE_THREAD
+                for pthread, only linux 
+    ---------------------
+    get process-resource limit 
+        for shell, ulimit -a 
+        ---------------------
+        /proc/pid/limit 
+        ---------------------
+        #include <sys/resource.h>
+        int getrlimit(int resource, struct rlimit* rlim);
+        int setrlimit(int resource, const struct rlimit* rlim);
+            ---------------------
+            struct rlimit
+            {
+                rlim_t rlim_cur; //soft-limit
+                rlim_t rlim_max; //hard-limit
+            }
+    ---------------------
+    specific-resource
+        RLIMIT_SA
+        RLIMIT_CORE 
+            safe problem 
+        RLIMIT_CPU 
+            SIGXCPU(soft-limit), SIGKILL (hard-limit)
+        RLIMIT_DATA
+        RLIMIT_FSIZE
+        RLIMIT_MEMLOCK
+        RLIMIT_MSGQUEUE
+        RLIMIT_NICE
+        RLIMMI_NOFILE
+        RLIMIT_NPROC
+        RLIMIT_RSS
+        RLIMIT_RTPRIO
+        RLIMIT_SIGPENDING
+        RLIMIT_STACK
+------------------------------------------------
+daemon 
+    run for long-time
+    no tty
+    ---------------------
+    create-daemon
+        fork; parent-process exit;
+        setsid;
+        fork; parent-process exit;
+        clear umask;
+        chdir("/");
+        close fd from parent-process;
+        dup std-fileno to /dev/null 
+    ---------------------
+    daemon-stop
+        script 
+        init send SIGTERM to daemon  when os shut down 
+    ---------------------
+    problem 
+        memory-leek
+        fd-leek
+        run single-instance
+    ---------------------
+    SIGHUP for reload
+        ---------------------
+        config 
+        log reopen
+        ---------------------
+    ---------------------
+    syslog 
+        local-programe --> syslog(3)  --> unix domain socket --> 
+        remote-programe --> udp soket  ------------------->   | --> syslod  --->console/fifo/disk/remote-host/login-user 
+        ---------------------
+        #include <syslog.h>
+        void openlog(const char* ident, int log_options, int facility);
+        void syslog(int priority, const char* format, ...);
+        void closelog(void);
+        int setlogmask(int mask_priority);
+        ---------------------
+        /etc/syslog.conf
