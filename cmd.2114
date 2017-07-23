@@ -1222,9 +1222,10 @@ daemon
         init send SIGTERM to daemon  when os shut down 
     ---------------------
     problem 
-        memory-leek
-        fd-leek
+        memory-leak
+        fd-leak
         run single-instance
+        logfile-too-large
     ---------------------
     SIGHUP for reload
         ---------------------
