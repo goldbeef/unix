@@ -1067,4 +1067,12 @@ process-create
         should use sync method to determine the order 
             semaphore/lock/pipe/signal
     ---------------------
+------------------------------------------------
+process-terminate
+    abnormal-terminate
+        coredmp 
+    normal-terminate
+        return 
+        exit 
+        _exit
 
