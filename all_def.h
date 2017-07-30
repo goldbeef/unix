@@ -27,6 +27,7 @@
 #include <sys/timerfd.h>
 #include <sys/resource.h>
 #include <sched.h>
+#include <dlfcn.h>
 
 #include "check.h"
 #include "signal_function.c"
