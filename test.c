@@ -20,3 +20,5 @@ int main()
     CHECK_NULL(NULL, "main, ret[%d]", -2);
     return 0;
 }
+
+main

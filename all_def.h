@@ -28,6 +28,10 @@
 #include <sys/resource.h>
 #include <sched.h>
 #include <dlfcn.h>
+#include <paths.h>
+#include <utmpx.h>
+#include <ctype.h>
+#include <sys/stat.h>
 
 #include "check.h"
 #include "signal_function.c"
