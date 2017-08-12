@@ -25,4 +25,7 @@ struct Response
     int seqNum;
 };
 
+int val1;
+int val2;
+int val3;
 #endif 
