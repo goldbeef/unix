@@ -32,9 +32,14 @@
 #include <utmpx.h>
 #include <ctype.h>
 #include <sys/stat.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <sys/msg.h>
+#include <sys/sem.h>
+#include <sys/mman.h>
 
 #include "check.h"
-#include "signal_function.c"
-#include "print_wait_status.c"
+//#include "signal_function.c"
+//#include "print_wait_status.c"
 
 #endif

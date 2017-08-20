@@ -56,4 +56,15 @@
     }                                                                                       \
     while(0);
 
+#define CHECK_NULL_VOID(ptr, format, args...)                                                    \
+    do                                                                                      \
+    {                                                                                       \
+        if (ptr == NULL)                                                                    \
+        {                                                                                   \
+            printf("(%s:%d) ptr[%s] NULL, "format"\n", __FILE__, __LINE__, #ptr, ##args);   \
+            return ;                                                                      \
+        }                                                                                   \
+    }                                                                                       \
+    while(0);
+
 #endif
