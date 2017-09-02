@@ -37,6 +37,9 @@
 #include <sys/msg.h>
 #include <sys/sem.h>
 #include <sys/mman.h>
+#include <mqueue.h>
+#include <semaphore.h>
+#include <stdarg.h>
 
 #include "check.h"
 //#include "signal_function.c"

@@ -67,5 +67,11 @@ int main(int argc, char *argv[])
 	printf("after lock\n");
 	displayMincore(addr, len);
 
+	//sdfsdf
+	//sdfsdf 
+	//sdfs 
+	//sdfsd 
+	//sdf
 	return 0;
 }
+

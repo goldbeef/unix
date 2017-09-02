@@ -13,11 +13,11 @@
 
 int main()
 {
-    //CHECK_RET(-1, "main");
-    //CHECK_RET(-1, "main, ret[%d]", -2);
+	//CHECK_RET(-1, "main");
+	//CHECK_RET(-1, "main, ret[%d]", -2);
 
-    //CHECK_NULL(NULL, "main");
-    CHECK_NULL(NULL, "main, ret[%d]", -2);
+	//CHECK_NULL(NULL, "main");
+	//CHECK_NULL(NULL, "main, ret[%d]", -2);
     return 0;
 }
 
